@@ -1,16 +1,28 @@
-# This is a sample Python script.
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+def create_board():
+    _size = 9
+    board = []
+    for i in range(_size):
+        board.append(i + 1)
+    return board
+
+def print_board(_board):
+    for i in range(0, 3, 6):
+        print(f"{_board[i]} | {_board[i + 1]} | {_board[i + 2]}")
+        print("----------")
+        print(f"{_board[i + 3]} | {_board[i + 4]} | {_board[i + 5]}")
+        print("----------")
+        print(f"{_board[i + 6]} | {_board[i + 7]} | {_board[i + 8]}")
+        print("----------")
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
+while True:
+    _board = create_board()
+    print_board(_board)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+    1player_move_2player_move
+    board_update
+    resault_check
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    start_stop
