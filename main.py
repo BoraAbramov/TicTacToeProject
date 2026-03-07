@@ -15,13 +15,22 @@ def print_board(_board):
         print(f"{_board[i + 6]} | {_board[i + 7]} | {_board[i + 8]}")
         print("----------")
 
+def get_move(player, _board)
+    while True:
+        player = input("Enter your move 1-9: ")
+        if player.isdigit():
+            player = int(player)
+        if 1 <= player <= 9:
+            return player
+        else:
+            continue
 
 
 while True:
     _board = create_board()
     print_board(_board)
 
-    1player_move_2player_move
+    get_move(player, _board)
     board_update
     resault_check
 
