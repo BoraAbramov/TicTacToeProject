@@ -17,7 +17,7 @@ def print_board(_board):
         print(f"{_board[i + 6]} | {_board[i + 7]} | {_board[i + 8]}")
         print("----------")
 
-def get_move(player, _board)
+def valid_input():
     while True:
         player = input("Enter your move 1-9: ")
         if player.isdigit():
@@ -27,7 +27,11 @@ def get_move(player, _board)
         else:
             continue
 
-def board_update():
+def board_check(player_move):
+    if _board[player_move] != int:
+        return False
+    else:
+        return True
 
 
 
@@ -35,14 +39,22 @@ def board_update():
 while True:
     _board = create_board()
 
-    while True:
-        player = current_player
-        player_move = valid_input
-        player_input = ready_for_board
-        board_check(player_input)
-        board_update(player_input)
-        check_conditions = winner_tie
-        print_board(_board)
-        _end = check_end
+    player = "❌"
 
-_summery = resault_restart
+    while True:
+        player_move = valid_input()
+
+        board_check(player_move)
+
+        board_update(player_move)
+
+        check_conditions = winner_tie()
+
+        print_board(_board)
+
+        _end = check_end()
+
+        switch_player()
+
+    _summery = resault_restart()
+print()
