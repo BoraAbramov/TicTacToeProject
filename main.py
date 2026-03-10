@@ -26,6 +26,11 @@ def get_move(player, board):
     else:
         print("invalid move")
 
+def check_winner(board, player):
+    win = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
+    for i in win:
+
+
 
 def board_check(player_move):
     if _board[player_move] != int:
