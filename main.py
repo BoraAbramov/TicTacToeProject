@@ -1,6 +1,7 @@
 
 def create_board():
-    #יוצר את הרשימה להדפסת הלוח
+#crete a board - _size addition for maybe change
+#Return list of board size
     _size = 9
     board = []
     for i in range(_size):
@@ -8,7 +9,7 @@ def create_board():
     return board
 
 def print_board(_board):
-    #מדפיס את הרשימה בצורת לוח 3 על 3
+#print _board as board
     for i in range(0, 3, 6):
         print(f"{_board[i]} | {_board[i + 1]} | {_board[i + 2]}")
         print("----------")
@@ -17,15 +18,14 @@ def print_board(_board):
         print(f"{_board[i + 6]} | {_board[i + 7]} | {_board[i + 8]}")
         print("----------")
 
-def valid_input():
-    while True:
-        player = input("Enter your move 1-9: ")
-        if player.isdigit():
-            player = int(player)
-        if 1 <= player <= 9:
-            return player
-        else:
-            continue
+def get_move(player, board):
+    move = input("please select a move: ")
+    if move in board:
+        board[move] = player
+        return board
+    else:
+        print("invalid move")
+
 
 def board_check(player_move):
     if _board[player_move] != int:
@@ -38,8 +38,6 @@ def board_check(player_move):
 
 while True:
     _board = create_board()
-
-    player = "❌"
 
     while True:
         player_move = valid_input()
