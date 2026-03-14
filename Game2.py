@@ -35,6 +35,7 @@ while _count < 9:
         for _ in x:
             if _board[_] == player:
                 print(f"{player} win")
+            winner = player
 
 
     _count += 1
