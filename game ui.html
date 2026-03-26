@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic Tac Toe – Material You</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --md-sys-color-primary: #6750A4;
+    --md-sys-color-on-primary: #FFFFFF;
+    --md-sys-color-primary-container: #EADDFF;
+    --md-sys-color-on-primary-container: #21005D;
+    --md-sys-color-secondary: #625B71;
+    --md-sys-color-secondary-container: #E8DEF8;
+    --md-sys-color-tertiary: #7D5260;
+    --md-sys-color-tertiary-container: #FFD8E4;
+    --md-sys-color-on-tertiary-container: #31111D;
+    --md-sys-color-surface: #FEF7FF;
+    --md-sys-color-surface-variant: #E7E0EC;
+    --md-sys-color-on-surface: #1C1B1F;
+    --md-sys-color-on-surface-variant: #49454F;
+    --md-sys-color-outline: #79747E;
+    --md-sys-color-outline-variant: #CAC4D0;
+    --md-sys-color-surface-container-low: #F7F2FA;
+    --md-sys-color-surface-container: #F3EDF7;
+    --md-sys-color-surface-container-high: #ECE6F0;
+    --md-sys-color-error: #B3261E;
+    --md-sys-color-error-container: #F9DEDC;
+    --md-elevation-1: 0px 1px 2px rgba(0,0,0,0.3), 0px 1px 3px 1px rgba(0,0,0,0.15);
+    --md-elevation-2: 0px 1px 2px rgba(0,0,0,0.3), 0px 2px 6px 2px rgba(0,0,0,0.15);
+    --md-elevation-3: 0px 4px 8px 3px rgba(0,0,0,0.15), 0px 1px 3px rgba(0,0,0,0.3);
+    --md-shape-corner-xl: 28px;
+    --md-shape-corner-lg: 16px;
+    --md-shape-corner-md: 12px;
+    --md-shape-corner-sm: 8px;
+    --md-shape-corner-full: 50px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Google Sans', sans-serif;
+    background: var(--md-sys-color-surface);
+    color: var(--md-sys-color-on-surface);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Top App Bar */
+  .top-app-bar {
+    width: 100%;
+    background: var(--md-sys-color-surface-container);
+    padding: 0 16px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--md-elevation-1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .top-app-bar .title {
+    font-family: 'Google Sans Display', sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .main-content {
+    width: 100%;
+    max-width: 480px;
+    padding: 24px 16px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Score Card */
+  .score-card {
+    background: var(--md-sys-color-surface-container-low);
+    border-radius: var(--md-shape-corner-xl);
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--md-elevation-1);
+  }
+  .score-player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .score-symbol {
+    font-size: 32px;
+    line-height: 1;
+  }
+  .score-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--md-sys-color-primary);
+    line-height: 1;
+  }
+  .score-label {
+    font-size: 12px;
+    color: var(--md-sys-color-on-surface-variant);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .score-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .score-vs {
+    font-size: 14px;
+    color: var(--md-sys-color-on-surface-variant);
+    font-weight: 500;
+  }
+  .score-ties-num {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--md-sys-color-secondary);
+  }
+
+  /* Turn Banner */
+  .turn-banner {
+    background: var(--md-sys-color-primary-container);
+    border-radius: var(--md-shape-corner-lg);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .turn-banner.player2 {
+    background: var(--md-sys-color-tertiary-container);
+  }
+  .turn-symbol-large {
+    font-size: 28px;
+    line-height: 1;
+  }
+  .turn-text {
+    flex: 1;
+  }
+  .turn-text .label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--md-sys-color-on-primary-container);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .turn-banner.player2 .label {
+    color: var(--md-sys-color-on-tertiary-container);
+  }
+  .turn-text .name {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--md-sys-color-on-primary-container);
+  }
+  .turn-banner.player2 .name {
+    color: var(--md-sys-color-on-tertiary-container);
+  }
+
+  /* Game Board */
+  .board-card {
+    background: var(--md-sys-color-surface-container);
+    border-radius: var(--md-shape-corner-xl);
+    padding: 20px;
+    box-shadow: var(--md-elevation-2);
+  }
+  .board-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .cell {
+    aspect-ratio: 1;
+    background: var(--md-sys-color-surface);
+    border-radius: var(--md-shape-corner-lg);
+    border: 1.5px solid var(--md-sys-color-outline-variant);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cell:hover:not(.taken) {
+    background: var(--md-sys-color-surface-container-high);
+    border-color: var(--md-sys-color-outline);
+    transform: scale(1.02);
+    box-shadow: var(--md-elevation-2);
+  }
+  .cell:active:not(.taken) {
+    transform: scale(0.97);
+  }
+  .cell.taken {
+    cursor: default;
+  }
+  .cell.player1 {
+    background: var(--md-sys-color-primary-container);
+    border-color: var(--md-sys-color-primary);
+  }
+  .cell.player2 {
+    background: var(--md-sys-color-tertiary-container);
+    border-color: var(--md-sys-color-tertiary);
+  }
+  .cell.winning {
+    background: var(--md-sys-color-primary);
+    border-color: var(--md-sys-color-primary);
+    animation: winning-pulse 0.6s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .cell.winning.player2-win {
+    background: var(--md-sys-color-tertiary);
+    border-color: var(--md-sys-color-tertiary);
+  }
+  .cell-number {
+    font-size: 16px;
+    color: var(--md-sys-color-outline);
+    font-weight: 500;
+    font-family: 'Google Sans', sans-serif;
+  }
+  .cell-symbol {
+    display: none;
+    animation: pop-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .cell.taken .cell-number { display: none; }
+  .cell.taken .cell-symbol { display: block; }
+  .cell.winning .cell-symbol { filter: brightness(0) invert(1); }
+
+  /* Ripple */
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(103, 80, 164, 0.2);
+    transform: scale(0);
+    animation: ripple-anim 0.6s linear;
+    pointer-events: none;
+  }
+
+  /* Result Dialog */
+  .dialog-scrim {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.32);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    animation: fade-in 0.15s ease;
+  }
+  .dialog-scrim.open {
+    display: flex;
+  }
+  .dialog {
+    background: var(--md-sys-color-surface-container-high);
+    border-radius: var(--md-shape-corner-xl);
+    width: min(312px, 90vw);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--md-elevation-3);
+    animation: dialog-in 0.3s cubic-bezier(0.05, 0.7, 0.1, 1.0);
+  }
+  .dialog-icon {
+    font-size: 56px;
+    line-height: 1;
+  }
+  .dialog-headline {
+    font-family: 'Google Sans Display', sans-serif;
+    font-size: 24px;
+    font-weight: 400;
+    text-align: center;
+    color: var(--md-sys-color-on-surface);
+  }
+  .dialog-supporting {
+    font-size: 14px;
+    color: var(--md-sys-color-on-surface-variant);
+    text-align: center;
+    line-height: 1.5;
+  }
+  .dialog-actions {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+
+  /* Buttons – Material 3 */
+  .btn-text {
+    height: 40px;
+    padding: 0 12px;
+    border: none;
+    background: transparent;
+    color: var(--md-sys-color-primary);
+    font-family: 'Google Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    border-radius: var(--md-shape-corner-full);
+    cursor: pointer;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-text:hover { background: rgba(103,80,164,0.08); }
+  .btn-filled {
+    height: 40px;
+    padding: 0 24px;
+    border: none;
+    background: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    font-family: 'Google Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    border-radius: var(--md-shape-corner-full);
+    cursor: pointer;
+    box-shadow: var(--md-elevation-1);
+    transition: all 0.2s;
+  }
+  .btn-filled:hover {
+    box-shadow: var(--md-elevation-2);
+    filter: brightness(1.05);
+  }
+  .btn-filled:active { transform: scale(0.97); }
+
+  /* FAB – reset button */
+  .fab-area {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .fab {
+    height: 56px;
+    padding: 0 16px;
+    background: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
+    border: none;
+    border-radius: var(--md-shape-corner-lg);
+    font-family: 'Google Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--md-elevation-2);
+    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .fab:hover {
+    box-shadow: var(--md-elevation-3);
+    filter: brightness(0.96);
+  }
+  .fab:active { transform: scale(0.97); }
+  .fab .material-symbols-rounded { font-size: 20px; }
+
+  /* Input row */
+  .input-row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .text-field {
+    position: relative;
+    height: 56px;
+  }
+  .text-field input {
+    width: 100%;
+    height: 100%;
+    padding: 16px 16px 0;
+    background: var(--md-sys-color-surface-container-high);
+    border: none;
+    border-bottom: 1px solid var(--md-sys-color-outline);
+    border-radius: var(--md-shape-corner-sm) var(--md-shape-corner-sm) 0 0;
+    font-family: 'Google Sans', sans-serif;
+    font-size: 16px;
+    color: var(--md-sys-color-on-surface);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .text-field input:focus {
+    border-bottom: 2px solid var(--md-sys-color-primary);
+  }
+  .text-field label {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--md-sys-color-on-surface-variant);
+    pointer-events: none;
+    transition: all 0.15s cubic-bezier(0.2,0,0,1);
+  }
+  .text-field input:focus + label,
+  .text-field input:not(:placeholder-shown) + label {
+    top: 10px;
+    transform: none;
+    font-size: 12px;
+    color: var(--md-sys-color-primary);
+  }
+
+  /* Setup card */
+  .setup-card {
+    background: var(--md-sys-color-surface-container-low);
+    border-radius: var(--md-shape-corner-xl);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: var(--md-elevation-1);
+  }
+  .setup-title {
+    font-family: 'Google Sans Display', sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+  }
+
+  @keyframes pop-in {
+    from { transform: scale(0.3); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+  @keyframes winning-pulse {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.08); }
+    100% { transform: scale(1); }
+  }
+  @keyframes ripple-anim {
+    to { transform: scale(4); opacity: 0; }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes dialog-in {
+    from { transform: scale(0.8); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-app-bar">
+  <span class="material-symbols-rounded" style="color:var(--md-sys-color-primary)">grid_view</span>
+  <span class="title">Tic Tac Toe</span>
+</div>
+
+<!-- Setup Screen -->
+<div class="main-content" id="setup-screen">
+  <div class="setup-card">
+    <div class="setup-title">שחקנים</div>
+    <div class="input-row">
+      <div class="text-field">
+        <input type="text" id="p1-name" placeholder=" " value="שחקן 1">
+        <label>❌ שם שחקן 1</label>
+      </div>
+      <div class="text-field">
+        <input type="text" id="p2-name" placeholder=" " value="שחקן 2">
+        <label>⭕ שם שחקן 2</label>
+      </div>
+    </div>
+    <button class="btn-filled" onclick="startGame()" style="width:100%;justify-content:center">
+      התחל משחק
+    </button>
+  </div>
+</div>
+
+<!-- Game Screen -->
+<div class="main-content" id="game-screen" style="display:none">
+
+  <div class="score-card">
+    <div class="score-player">
+      <div class="score-symbol">❌</div>
+      <div class="score-num" id="score-x">0</div>
+      <div class="score-label" id="name-x-label">שחקן 1</div>
+    </div>
+    <div class="score-divider">
+      <div class="score-vs">תיקו</div>
+      <div class="score-ties-num" id="score-ties">0</div>
+    </div>
+    <div class="score-player">
+      <div class="score-symbol">⭕</div>
+      <div class="score-num" id="score-o">0</div>
+      <div class="score-label" id="name-o-label">שחקן 2</div>
+    </div>
+  </div>
+
+  <div class="turn-banner" id="turn-banner">
+    <div class="turn-symbol-large" id="turn-symbol">❌</div>
+    <div class="turn-text">
+      <div class="label">תור של</div>
+      <div class="name" id="turn-name">שחקן 1</div>
+    </div>
+    <span class="material-symbols-rounded" style="color:var(--md-sys-color-primary)">stylus</span>
+  </div>
+
+  <div class="board-card">
+    <div class="board-grid" id="board-grid"></div>
+  </div>
+
+  <div class="fab-area">
+    <button class="fab" onclick="resetBoard()">
+      <span class="material-symbols-rounded">refresh</span>
+      סיבוב חדש
+    </button>
+  </div>
+</div>
+
+<!-- Result Dialog -->
+<div class="dialog-scrim" id="dialog-scrim">
+  <div class="dialog">
+    <div class="dialog-icon" id="dialog-icon">🏆</div>
+    <div class="dialog-headline" id="dialog-headline">ניצחון!</div>
+    <div class="dialog-supporting" id="dialog-supporting">כל הכבוד!</div>
+    <div class="dialog-actions">
+      <button class="btn-text" onclick="endGame()">סיום</button>
+      <button class="btn-filled" onclick="closeDialogAndReset()">סיבוב נוסף</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const symbol  = "❌";
+  const symbol2 = "⭕";
+
+  const win = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
+  ];
+
+  let board = [];
+  let current_player = symbol;
+  let score_table = {};
+  let gameActive = false;
+  let p1Name = "שחקן 1";
+  let p2Name = "שחקן 2";
+
+  function create_board() {
+    board = [];
+    for (let i = 0; i < 9; i++) board.push(i + 1);
+  }
+
+  function check_winner(player) {
+    for (const x of win) {
+      if (board[x[0]] === player && board[x[1]] === player && board[x[2]] === player) {
+        return x;
+      }
+    }
+    return null;
+  }
+
+  function player_change(current) {
+    return current === symbol ? symbol2 : symbol;
+  }
+
+  function startGame() {
+    p1Name = document.getElementById('p1-name').value || "שחקן 1";
+    p2Name = document.getElementById('p2-name').value || "שחקן 2";
+    document.getElementById('name-x-label').textContent = p1Name;
+    document.getElementById('name-o-label').textContent = p2Name;
+    score_table = { [symbol]: 0, [symbol2]: 0, ties: 0 };
+    document.getElementById('setup-screen').style.display = 'none';
+    document.getElementById('game-screen').style.display = 'flex';
+    resetBoard();
+  }
+
+  function resetBoard() {
+    create_board();
+    current_player = symbol;
+    gameActive = true;
+    renderBoard();
+    updateTurnBanner();
+  }
+
+  function renderBoard() {
+    const grid = document.getElementById('board-grid');
+    grid.innerHTML = '';
+    board.forEach((val, i) => {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.innerHTML = `<span class="cell-number">${val}</span><span class="cell-symbol"></span>`;
+      cell.addEventListener('click', (e) => handleMove(i, cell, e));
+      grid.appendChild(cell);
+    });
+  }
+
+  function handleMove(index, cellEl, e) {
+    if (!gameActive) return;
+    if (board[index] === symbol || board[index] === symbol2) return;
+
+    // Ripple effect
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    const rect = cellEl.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+    ripple.style.top  = (e.clientY - rect.top  - size/2) + 'px';
+    cellEl.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+
+    board[index] = current_player;
+    cellEl.querySelector('.cell-symbol').textContent = current_player;
+    cellEl.classList.add('taken', current_player === symbol ? 'player1' : 'player2');
+
+    const winCombo = check_winner(current_player);
+    if (winCombo) {
+      gameActive = false;
+      score_table[current_player]++;
+      updateScore();
+      highlightWin(winCombo, current_player);
+      setTimeout(() => showDialog(current_player, false), 600);
+      return;
+    }
+
+    if (board.every(v => v === symbol || v === symbol2)) {
+      gameActive = false;
+      score_table.ties++;
+      updateScore();
+      setTimeout(() => showDialog(null, true), 400);
+      return;
+    }
+
+    current_player = player_change(current_player);
+    updateTurnBanner();
+  }
+
+  function highlightWin(combo, player) {
+    const cells = document.querySelectorAll('.cell');
+    combo.forEach(i => {
+      cells[i].classList.add('winning');
+      if (player === symbol2) cells[i].classList.add('player2-win');
+    });
+  }
+
+  function updateTurnBanner() {
+    const banner = document.getElementById('turn-banner');
+    const isP2 = current_player === symbol2;
+    banner.className = 'turn-banner' + (isP2 ? ' player2' : '');
+    document.getElementById('turn-symbol').textContent = current_player;
+    document.getElementById('turn-name').textContent = isP2 ? p2Name : p1Name;
+  }
+
+  function updateScore() {
+    document.getElementById('score-x').textContent    = score_table[symbol];
+    document.getElementById('score-o').textContent    = score_table[symbol2];
+    document.getElementById('score-ties').textContent = score_table.ties;
+  }
+
+  function showDialog(winner, isTie) {
+    const icon  = document.getElementById('dialog-icon');
+    const hl    = document.getElementById('dialog-headline');
+    const sup   = document.getElementById('dialog-supporting');
+    if (isTie) {
+      icon.textContent = '🤝';
+      hl.textContent   = 'תיקו!';
+      sup.textContent  = 'משחק מאוזן. בואו נמשיך!';
+    } else {
+      const name = winner === symbol ? p1Name : p2Name;
+      icon.textContent = winner;
+      hl.textContent   = `${name} ניצח!`;
+      sup.textContent  = `כל הכבוד! תרצו סיבוב נוסף?`;
+    }
+    document.getElementById('dialog-scrim').classList.add('open');
+  }
+
+  function closeDialogAndReset() {
+    document.getElementById('dialog-scrim').classList.remove('open');
+    resetBoard();
+  }
+
+  function endGame() {
+    document.getElementById('dialog-scrim').classList.remove('open');
+    document.getElementById('game-screen').style.display = 'none';
+    document.getElementById('setup-screen').style.display = 'flex';
+  }
+</script>
+</body>
+</html>
